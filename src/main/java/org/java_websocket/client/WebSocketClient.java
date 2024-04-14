@@ -481,6 +481,7 @@ public abstract class WebSocketClient extends AbstractWebSocket implements Runna
 
       socket.setTcpNoDelay(isTcpNoDelay());
       socket.setReuseAddress(isReuseAddr());
+      socket.setReceiveBufferSize(getReceiveBufferSize());
 
       if (!socket.isConnected()) {
         InetSocketAddress addr = dnsResolver == null ? InetSocketAddress.createUnresolved(uri.getHost(), getPort()) : new InetSocketAddress(dnsResolver.resolve(uri), this.getPort());
@@ -531,7 +532,7 @@ public abstract class WebSocketClient extends AbstractWebSocket implements Runna
     writeThread.setDaemon(isDaemon());
     writeThread.start();
 
-    byte[] rawbuffer = new byte[WebSocketImpl.RCVBUF];
+    byte[] rawbuffer = new byte[getReceiveBufferSize()];
     int readBytes;
 
     try {
